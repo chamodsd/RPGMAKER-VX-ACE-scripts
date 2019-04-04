@@ -1,0 +1,12 @@
+# 实例的创建在L/R键响应的脚本中
+
+class Scene_Map < Scene_Base
+  alias chamo_pre_transfer pre_transfer
+  
+  def pre_transfer
+    @map_mode_window.close
+    chamo_pre_transfer
+  end
+  
+  
+end
