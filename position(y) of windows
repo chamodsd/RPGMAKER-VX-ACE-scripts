@@ -1,0 +1,60 @@
+$win_num = 0
+$win_mode_on = 0
+$win_mapname_on = 0
+
+# 问题在于，用initialize方法之后，还能再对其中的参数进行调整吗？
+# 尤其是参数还是用了super方法设置的。
+
+#-----在父类中编写计算的统一算法-----
+class Window_Base
+  def chamo_count
+      $win_num = $win_mode_on + $win_mapname_on + $chamo_hint - 1
+  end  
+end
+
+
+#-----圣痕赋予ON/OFF窗口-----
+class Window_Mode < Window_Base
+  
+  def update
+    super
+    if @show_count == 150 && $game_map.name_display
+      $win_mode_on = 1
+      chamo_count
+      update_fadein
+      @show_count -= 1
+      self.y = 30 * $win_num
+    elsif @show_count > 0 && $game_map.name_display
+      update_fadein
+      @show_count -= 1
+    else
+      $win_mode_on = 0
+      update_fadeout
+    end
+  end
+
+end
+
+#-----地图名字窗口-----
+class Window_MapName < Window_Base
+
+  def update
+    super
+    if @show_count == 150 && $game_map.name_display
+      $win_mapname_on = 1
+      chamo_count
+      update_fadein
+      @show_count -= 1
+      self.y = 30 * $win_num
+    elsif @show_count > 0 && $game_map.name_display
+      update_fadein
+      @show_count -= 1
+    else
+      $win_mapname_on = 0
+      update_fadeout
+    end
+  end
+
+end
+
+# via chamo
