@@ -1,0 +1,77 @@
+class Scene_Map < Scene_Base
+  
+	alias chamo_start start
+	
+	def start
+		chamo_start # 原先的start，必须有这一项，不然原来的start就完全被改写
+		@event_calling = false
+		@event_calling_ii = false
+    @event_calling_iii = false
+	end
+	#-------呼出菜单、L键、R键切换模式--------
+	# R键思路：
+	# 创建一个与Window_Mapname相近的类，进入任意场景会先建立一个该类的实例
+  # 满足条件并且按下R时会显示该窗口
+	# WIN有CLOSE和OPEN方法，对MAP NAME WIN来说，
+  # OPEN方法应该还有FADE OUT,FADE IN的设置
+	# CLOSE方法则是直接关闭WIN
+	# 注意在scene类中创建win类的实例并不需要二者有任何关联！
+	# 子类仅仅是可以使用父类的方法而已
+	#-----------------------------------------
+  # 使用方法：创建一个窗口类脚本（需要新创建一个类）→改写下述内容即可
+  #-----------------------------------------
+  # I.创建窗口实例
+	alias chamo_create_all_windows create_all_windows
+		# 疑似在进入场景时就创建完了以下窗口，只不过是显示与否
+	def create_all_windows
+		chamo_create_all_windows
+		@map_mode_window = Window_Mode.new
+    @map_task_window = Window_Task.new
+	end
+	#-----------------------------------------
+	#	II.按键响应	
+	alias chamo_update_call_menu update_call_menu
+
+	def update_call_menu
+    
+		if $game_system.menu_disabled || $game_map.interpreter.running?
+			@menu_calling = false
+			@event_calling = false
+			@event_calling_ii = false
+			@event_calling_iii = false
+      
+		else
+			@menu_calling ||= Input.trigger?(:B)
+			@event_calling ||= Input.trigger?(:L)
+			@event_calling_ii ||= Input.trigger?(:R)
+			@event_calling_iii ||= Input.trigger?(:Z)
+
+			call_menu if @menu_calling && !$game_player.moving?
+      
+			#----按下L键的响应（事件3包含图像变换）----
+			$game_temp.reserve_common_event(3) if @event_calling && !$game_player.moving?
+      
+			#----按下R键的响应（事件198包含等待1帧）----
+      if $game_party.item_number($data_items[979]) != 0
+        
+
+      # 这里一定要加上!=0，似乎只要不是nil就都默认布尔值为1，而不是看它是不是0
+        $game_temp.reserve_common_event(198) if @event_calling_ii && !$game_player.moving?
+        @map_mode_window.open if @event_calling_ii && !$game_player.moving?
+      end
+      
+      #----按下Z键的响应（主线提示）----
+      if @event_calling_iii && !$game_player.moving?
+        $chamo_hint = 1 - $chamo_hint
+        $game_temp.reserve_common_event(197) # 等待1帧
+        @map_task_window.open if $chamo_hint == 1
+        @map_task_window.close if $chamo_hint == 0
+      end 
+      
+		end
+	end
+  
+end
+
+
+# via 茶沫
