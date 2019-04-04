@@ -1,0 +1,148 @@
+#==============================================================================
+# ** Window_Mode
+#------------------------------------------------------------------------------
+#  取消了show count的设定，以便按下就一直显示主线提示.
+#==============================================================================
+
+$chamo_hint = 0
+
+class Window_Task < Window_Base
+  #--------------------------------------------------------------------------
+  # * Object Initialization
+  #--------------------------------------------------------------------------
+  def initialize
+    super(0-24, 0, window_width, fitting_height(1))
+    # x,y,width,height
+    
+    self.opacity = 0
+    self.contents_opacity = 0
+    @show_count = 0
+    refresh
+  end
+  #--------------------------------------------------------------------------
+  # * Get Window Width
+  #--------------------------------------------------------------------------
+  def window_width
+    return 544+24+24
+  end
+  #--------------------------------------------------------------------------
+  # * Frame Update
+  #--------------------------------------------------------------------------
+  def update
+    super
+    if @show_count > 0 && $chamo_hint == 1
+      update_fadein
+      @show_count -= 1
+    elsif $chamo_hint == 0
+      update_fadeout
+    end
+  end
+  #--------------------------------------------------------------------------
+  # * Update Fadein
+  #--------------------------------------------------------------------------
+  def update_fadein
+    self.contents_opacity += 16
+  end
+  #--------------------------------------------------------------------------
+  # * Update Fadeout
+  #--------------------------------------------------------------------------
+  def update_fadeout
+    self.contents_opacity -= 16
+  end
+  #--------------------------------------------------------------------------
+  # * Open Window
+  #--------------------------------------------------------------------------
+  def open
+    refresh
+    @show_count = 150
+    self.contents_opacity = 0
+    self
+  end
+  #--------------------------------------------------------------------------
+  # * Close Window
+  #--------------------------------------------------------------------------
+  def close
+    @show_count = 0
+    $chamo_hint == 0
+    self
+  end
+  #--------------------------------------------------------------------------
+  # * Refresh
+  #--------------------------------------------------------------------------
+  def refresh
+    contents.clear
+    draw_background(contents.rect)
+        
+    if $game_variables[29] == 0
+      draw_text(contents.rect, "主线任务：设法收集灵魂因子，然后去北边的小屋休息吧！", 1)
+      #self.width = 16*14 这样不会增长可见的窗口长度，只会导致窗口通过左右可以切换
+    elsif $game_variables[29] == 1
+      draw_text(contents.rect, "主线任务：看看今晚休息的时候，还有没有访客吧！", 1)
+    end
+    
+    if $game_variables[9] == 1 # 死神线
+      if $game_variables[8] == 0
+        draw_text(contents.rect, "　主线任务：DEATH！", 1)
+      elsif $game_variables[8] == 1
+        draw_text(contents.rect, "　主线任务：前往东边洞窟内部的“看不见的梯子”吧！", 1)
+      elsif $game_variables[8] == 2
+        draw_text(contents.rect, "　主线任务：前往东边洞窟内部的“看不见的梯子”吧！", 1)
+      elsif $game_variables[8] == 3
+        draw_text(contents.rect, "　主线任务：前往东边洞窟内部的“看不见的梯子”吧！", 1)
+      elsif $game_variables[8] == 4
+        draw_text(contents.rect, "　主线任务：前往东边洞窟内部的“看不见的梯子”吧！", 1)
+      elsif $game_variables[8] == 5
+        draw_text(contents.rect, "　主线任务：前往东边洞窟内部的“看不见的梯子”吧！", 1)
+      elsif $game_variables[8] == 6
+        draw_text(contents.rect, "　主线任务：前往东边洞窟内部的“看不见的梯子”吧！", 1)
+      else
+      end
+    end
+    
+    if $game_variables[10] == 1 # 使魔线
+      if $game_variables[8] == 0
+        draw_text(contents.rect, "主线任务：等待最后的来访吧！", 1)
+      elsif $game_variables[8] == 1
+        draw_text(contents.rect, "主线任务：前往东边洞窟内部的“看不见的梯子”吧！", 1)
+      elsif $game_variables[8] == 1+1
+        draw_text(contents.rect, "主线任务：设法进入冥界，寻找封印之柱吧！", 1)
+      elsif $game_variables[8] == 2+1
+        draw_text(contents.rect, "主线任务：在洞穴中心使用生命之水，打开通往圣坛的道路吧！", 1)
+      elsif $game_variables[8] == 3+1
+        draw_text(contents.rect, "主线任务：前往洞窟西北部的圣坛，获得圣水吧！", 1)
+      elsif $game_variables[8] == 4+1
+        draw_text(contents.rect, "主线任务：为人们刻下圣痕后，回到封印之柱吧！", 1)
+      elsif $game_variables[8] == 5+1
+        draw_text(contents.rect, "主线任务：一起逃离冥界吧！", 1)
+      elsif $game_variables[8] == 6+1
+        draw_text(contents.rect, "　主线任务：unknown", 1)
+      else
+      end
+    end
+    
+  end
+  #--------------------------------------------------------------------------
+  # * Draw Background
+  #--------------------------------------------------------------------------
+  def draw_background(rect)
+    temp_rect = rect.clone
+    temp_rect.width /= 2
+    contents.gradient_fill_rect(temp_rect, back_color2, back_color1)
+    temp_rect.x = temp_rect.width
+    contents.gradient_fill_rect(temp_rect, back_color1, back_color2)
+  end
+  #--------------------------------------------------------------------------
+  # * Get Background Color 1
+  #--------------------------------------------------------------------------
+  def back_color1
+    Color.new(0, 0, 0, 192)
+  end
+  #--------------------------------------------------------------------------
+  # * Get Background Color 2
+  #--------------------------------------------------------------------------
+  def back_color2
+    Color.new(0, 0, 0, 160)
+  end
+end
+
+# via chamo
