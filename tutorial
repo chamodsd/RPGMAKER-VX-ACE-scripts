@@ -1,0 +1,77 @@
+=begin
+#这是一个TEST
+#还有bgs，se，me的method。
+#Audio.bgm_play("Audio/BGM/Battle2",100,100)
+
+#RPG::BGM.new("Battle3",100,100).play
+
+bgm = RPG::BGM.new("Battle3",100,100)
+bgm.play
+#（"路径",音量，速率（100为标准速率））
+
+#数组array
+array=["a",true,2,3]
+msgbox_p(array[0])
+array[array.size]=1
+
+#class类
+#当你需要定义一个属于某个class的量时，使用Zyx=Zyx.new
+#而所有属于该class的量都可以使用已经定义的各个函数。
+#注意：class的名字必须首字母大写
+#例如下述class:
+class Zyx
+  def a()
+    msgbox_p("tql")
+  end
+  def b()
+    msgbox_p("tcl")
+  end
+end
+
+Zyx=Zyx.new
+Zyx.a()
+
+
+
+#定义函数
+def chamo                    #定义chamo
+  local=9
+  msgbox_p("chamo")          #以窗口形式输出“chamo”
+  msgbox_p(local)
+  return local               #以窗口形式输出local的值
+  return local=1             #以窗口形式输出一个布尔值
+end
+
+#下列定义chamodsd。注意定义chamodsd时也要定义3个参数：布尔值，数字，字符串
+#而且下列定义中，字符串默认是"a"
+#这意味着你在定义这个函数时可以不定义string这个参数，它有默认值。
+#相似的，你可以给所有的参数都设定一个默认值。
+def chamodsd( bool , number , string="a" )
+  msgbox_p(bool)
+  msgbox_p(number)
+  msgbox_p(string)
+end
+
+
+
+a=1                           #给a赋值
+b=2
+
+if a==1                       #注意判断句中用==
+  chamo
+else
+  chamodsd( true , 11 , "A")
+  chamodsd( true , 22 )
+end
+
+#注意判断句中用&&表示iff两个括号内都为真才执行语句
+#&&：与；||：或；
+#当同时需要用到$$与||时，需要添加括号来确认优先级
+#相似的，可以使用xxx is true来作为布尔值的来源。
+if ( a > b ) && ( bool is true )      
+  chamo
+else
+  chamodsd( true , 22 )
+end
+
+=end
